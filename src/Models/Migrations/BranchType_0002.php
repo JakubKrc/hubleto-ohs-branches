@@ -1,6 +1,6 @@
 <?php
 
-namespace Hubleto\App\External\WaiBlue\HlthcrBranches\Models\Migrations;
+namespace Hubleto\App\External\WaiBlue\OhsBranches\Models\Migrations;
 
 use Hubleto\Framework\Migration;
 
@@ -9,12 +9,12 @@ class BranchType_0002 extends Migration
 {
   public function upgradeSchema(): void
   {
-    $this->db->execute("ALTER TABLE `hlthcr_branch_types` ADD COLUMN `is_active` tinyint(1) NOT NULL DEFAULT 1, ADD INDEX `is_active` (`is_active`)");
+    $this->db->execute("ALTER TABLE `ohs_branch_types` ADD COLUMN `is_active` tinyint(1) NOT NULL DEFAULT 1, ADD INDEX `is_active` (`is_active`)");
   }
 
   public function downgradeSchema(): void
   {
-    $this->db->execute("ALTER TABLE `hlthcr_branch_types` DROP COLUMN `is_active`");
+    $this->db->execute("ALTER TABLE `ohs_branch_types` DROP COLUMN `is_active`");
   }
 
   public function upgradeForeignKeys(): void

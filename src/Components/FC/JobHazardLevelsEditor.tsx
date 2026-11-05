@@ -19,7 +19,7 @@ interface HazardTypeGroup {
   hazards: Array<HazardRow>,
 }
 
-const parentApp = 'Hubleto/App/External/WaiBlue/HlthcrBranches';
+const parentApp = 'Hubleto/App/External/WaiBlue/OhsBranches';
 const T = new Translator(parentApp + '/Loader', 'Components/JobHazardLevelsEditor');
 
 // Same values as JobHasHazard::LEVEL_* in PHP.
@@ -53,7 +53,7 @@ const JobHazardLevelsEditor = (props: JobHazardLevelsEditorProps) => {
   }
 
   function loadLevels() {
-    request.get('hlthcr-branches/api/get-job-hazard-levels', {idJob: props.idJob}, applyLoadedLevels);
+    request.get('ohs/branches/api/get-job-hazard-levels', {idJob: props.idJob}, applyLoadedLevels);
   }
 
   React.useEffect(loadLevels, [props.idJob]);
@@ -73,7 +73,7 @@ const JobHazardLevelsEditor = (props: JobHazardLevelsEditorProps) => {
 
   function saveLevels() {
     const requestParams = {idJob: props.idJob, levels: levels};
-    request.post('hlthcr-branches/api/save-job-hazard-levels', requestParams, {}, showSaveResult);
+    request.post('ohs/branches/api/save-job-hazard-levels', requestParams, {}, showSaveResult);
   }
 
   function renderLevelInput(hazardType: HazardTypeGroup, hazard: HazardRow) {

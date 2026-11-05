@@ -7,7 +7,7 @@ interface TableJobsProps extends TableProps {
 }
 
 const componentName = 'TableJobs'
-const parentApp = 'Hubleto/App/External/WaiBlue/HlthcrBranches'
+const parentApp = 'Hubleto/App/External/WaiBlue/OhsBranches'
 
 // A job without its own exam interval is stored as 0; the list shows an empty cell instead.
 function renderJobCell(table: TableMeta, columnName: string, column: any, data: any, options: any) {
@@ -22,7 +22,7 @@ const TableJobs = (props: TableJobsProps) => {
     componentName={componentName}
     parentApp={parentApp}
     model={parentApp + '/Models/Job'}
-    baseUrlSlug='hlthcr-branches/jobs'
+    baseUrlSlug='ohs/branches/jobs'
     endpointParams={{idBranch: idBranch}}
     formDefaultValues={idBranch > 0 ? {id_branch: idBranch} : {}}
     formModalProps={{type: 'right wide'}}

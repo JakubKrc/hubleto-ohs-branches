@@ -1,8 +1,8 @@
 <?php
 
-namespace Hubleto\App\External\WaiBlue\HlthcrBranches\Models\RecordManagers\Traits;
+namespace Hubleto\App\External\WaiBlue\OhsBranches\Models\RecordManagers\Traits;
 
-use Hubleto\App\External\WaiBlue\HlthcrBranches\Services\BranchScope;
+use Hubleto\App\External\WaiBlue\OhsBranches\Services\BranchScope;
 
 /**
  * For RecordManagers of records that belong to a branch (table column id_branch).

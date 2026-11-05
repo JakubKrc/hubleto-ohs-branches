@@ -1,14 +1,14 @@
 <?php
 
-namespace Hubleto\App\External\WaiBlue\HlthcrBranches\Models;
+namespace Hubleto\App\External\WaiBlue\OhsBranches\Models;
 
-use Hubleto\App\External\WaiBlue\HlthcrCore\Controllers\Api\UserLookup;
-use Hubleto\App\External\WaiBlue\HlthcrCore\Models\Traits\EmptyDatesAsNull;
-use Hubleto\App\External\WaiBlue\HlthcrCore\Models\Traits\UsesStoredValues;
+use Hubleto\App\External\WaiBlue\OhsCore\Controllers\Api\UserLookup;
+use Hubleto\App\External\WaiBlue\OhsCore\Models\Traits\EmptyDatesAsNull;
+use Hubleto\App\External\WaiBlue\OhsCore\Models\Traits\UsesStoredValues;
 use Hubleto\App\Community\Auth\Models\User;
 use Hubleto\App\Community\Customers\Models\Customer;
-use Hubleto\App\External\WaiBlue\HlthcrCore\Controllers\Api\CustomerLookup;
-use Hubleto\App\External\WaiBlue\HlthcrCore\Services\Roles;
+use Hubleto\App\External\WaiBlue\OhsCore\Controllers\Api\CustomerLookup;
+use Hubleto\App\External\WaiBlue\OhsCore\Services\Roles;
 use Hubleto\Framework\Db\Column\Boolean;
 use Hubleto\Framework\Db\Column\Date;
 use Hubleto\Framework\Db\Column\Email;
@@ -16,16 +16,16 @@ use Hubleto\Framework\Db\Column\Lookup;
 use Hubleto\Framework\Db\Column\Text;
 use Hubleto\Framework\Db\Column\Varchar;
 
-class Branch extends \Hubleto\App\External\WaiBlue\HlthcrCore\Models\HlthcrModel
+class Branch extends \Hubleto\App\External\WaiBlue\OhsCore\Models\OhsModel
 {
   use EmptyDatesAsNull;
   use UsesStoredValues;
-  public string $table = 'hlthcr_branches';
+  public string $table = 'ohs_branches';
   public string $recordManagerClass = RecordManagers\Branch::class;
   // With the client, because branch names are unique only per client (review C1).
   public ?string $lookupSqlValue = 'concat({%TABLE%}.name, ifnull(concat(", ", {%TABLE%}.city), ""),
     ifnull(concat(" - ", (select name from customers where customers.id = {%TABLE%}.id_customer)), ""))';
-  public ?string $lookupUrlDetail = 'hlthcr-branches/branches/{%ID%}';
+  public ?string $lookupUrlDetail = 'ohs/branches/branches/{%ID%}';
 
   public array $relations = [
     'CUSTOMER' => [ self::BELONGS_TO, Customer::class, 'id_customer', 'id' ],

@@ -7,7 +7,7 @@ interface TableBranchesProps extends TableProps {
 }
 
 const componentName = 'TableBranches'
-const parentApp = 'Hubleto/App/External/WaiBlue/HlthcrBranches'
+const parentApp = 'Hubleto/App/External/WaiBlue/OhsBranches'
 
 const TableBranches = (props: TableBranchesProps) => {
   const idCustomer = props.idCustomer ?? 0;
@@ -15,7 +15,7 @@ const TableBranches = (props: TableBranchesProps) => {
     componentName={componentName}
     parentApp={parentApp}
     model={parentApp + '/Models/Branch'}
-    baseUrlSlug='hlthcr-branches/branches'
+    baseUrlSlug='ohs/branches/branches'
     endpointParams={{idCustomer: idCustomer}}
     formDefaultValues={idCustomer > 0 ? {id_customer: idCustomer} : {}}
     formModalProps={{type: 'right wide'}}

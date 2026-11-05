@@ -1,13 +1,13 @@
 {
-    "name": "wai-blue/hubleto-hlthcr-branches",
+    "name": "wai-blue/hubleto-ohs-branches",
     "license": "proprietary",
-    "description": "Hlthcr for Hubleto: Branches of the clients, job positions with hazard categories, categorisation of work, deficiencies",
+    "description": "Ohs for Hubleto: Branches of the clients, job positions with hazard categories, categorisation of work, deficiencies",
     "require": {
-        "wai-blue/hubleto-hlthcr-core": "dev-main"
+        "wai-blue/hubleto-ohs-core": "dev-main"
     },
     "autoload": {
         "psr-4": {
-            "Hubleto\\App\\External\\WaiBlue\\HlthcrBranches\\": "src"
+            "Hubleto\\App\\External\\WaiBlue\\OhsBranches\\": "src"
         }
     },
     "minimum-stability": "dev"

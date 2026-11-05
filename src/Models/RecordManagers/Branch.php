@@ -1,12 +1,12 @@
 <?php
 
-namespace Hubleto\App\External\WaiBlue\HlthcrBranches\Models\RecordManagers;
+namespace Hubleto\App\External\WaiBlue\OhsBranches\Models\RecordManagers;
 
 use Hubleto\App\Community\Auth\Models\RecordManagers\User;
 use Hubleto\App\Community\Customers\Models\RecordManagers\Customer;
-use Hubleto\App\External\WaiBlue\HlthcrCore\Models\RecordManagers\Traits\OffersActiveRecords;
-use Hubleto\App\External\WaiBlue\HlthcrBranches\Services\BranchScope;
-use Hubleto\App\External\WaiBlue\HlthcrCore\Services\Roles;
+use Hubleto\App\External\WaiBlue\OhsCore\Models\RecordManagers\Traits\OffersActiveRecords;
+use Hubleto\App\External\WaiBlue\OhsBranches\Services\BranchScope;
+use Hubleto\App\External\WaiBlue\OhsCore\Services\Roles;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -14,7 +14,7 @@ class Branch extends \Hubleto\Erp\RecordManager
 {
   use OffersActiveRecords;
 
-  public $table = 'hlthcr_branches';
+  public $table = 'ohs_branches';
 
   // Options of the status filter in the table (URL filters[STATUS_FILTER]=<option>).
   const STATUS_FILTER = 'fBranchStatus';
@@ -41,7 +41,7 @@ class Branch extends \Hubleto\Erp\RecordManager
     return $this->hasMany(Job::class, 'id_branch', 'id');
   }
 
-  // The same rule as for jobs and everything else under a branch (BranchScope, by Hlthcr role). Hubleto's parent
+  // The same rule as for jobs and everything else under a branch (BranchScope, by Ohs role). Hubleto's parent
   // would limit by user type because of id_owner, so it is left out (branches have no junctions).
   public function prepareReadQuery(mixed $query = null, int $level = 0, array|null $includeRelations = null): mixed
   {

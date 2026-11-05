@@ -1,6 +1,6 @@
 <?php
 
-namespace Hubleto\App\External\WaiBlue\HlthcrBranches\Models\Migrations;
+namespace Hubleto\App\External\WaiBlue\OhsBranches\Models\Migrations;
 
 use Hubleto\Framework\Migration;
 
@@ -8,7 +8,7 @@ class Branch_0001 extends Migration
 {
   public function upgradeSchema(): void
   {
-    $this->db->execute("CREATE TABLE IF NOT EXISTS `hlthcr_branches` (
+    $this->db->execute("CREATE TABLE IF NOT EXISTS `ohs_branches` (
       `id` int(8) primary key auto_increment,
       `name` varchar(255) NOT NULL,
       `id_customer` int(8) NULL DEFAULT NULL,
@@ -32,20 +32,20 @@ class Branch_0001 extends Migration
 
   public function downgradeSchema(): void
   {
-    $this->db->execute("DROP TABLE IF EXISTS `hlthcr_branches`");
+    $this->db->execute("DROP TABLE IF EXISTS `ohs_branches`");
   }
 
   public function upgradeForeignKeys(): void
   {
-    $this->db->execute("ALTER TABLE `hlthcr_branches` ADD CONSTRAINT `fk__hlthcr_branches__id_customer` FOREIGN KEY (`id_customer`) REFERENCES `customers` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT");
-    $this->db->execute("ALTER TABLE `hlthcr_branches` ADD CONSTRAINT `fk__hlthcr_branches__id_owner` FOREIGN KEY (`id_owner`) REFERENCES `users` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT");
-    $this->db->execute("ALTER TABLE `hlthcr_branches` ADD CONSTRAINT `fk__hlthcr_branches__id_branch_type` FOREIGN KEY (`id_branch_type`) REFERENCES `hlthcr_branch_types` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT");
+    $this->db->execute("ALTER TABLE `ohs_branches` ADD CONSTRAINT `fk__ohs_branches__id_customer` FOREIGN KEY (`id_customer`) REFERENCES `customers` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT");
+    $this->db->execute("ALTER TABLE `ohs_branches` ADD CONSTRAINT `fk__ohs_branches__id_owner` FOREIGN KEY (`id_owner`) REFERENCES `users` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT");
+    $this->db->execute("ALTER TABLE `ohs_branches` ADD CONSTRAINT `fk__ohs_branches__id_branch_type` FOREIGN KEY (`id_branch_type`) REFERENCES `ohs_branch_types` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT");
   }
 
   public function downgradeForeignKeys(): void
   {
-    $this->db->execute("ALTER TABLE `hlthcr_branches` DROP FOREIGN KEY `fk__hlthcr_branches__id_customer`");
-    $this->db->execute("ALTER TABLE `hlthcr_branches` DROP FOREIGN KEY `fk__hlthcr_branches__id_owner`");
-    $this->db->execute("ALTER TABLE `hlthcr_branches` DROP FOREIGN KEY `fk__hlthcr_branches__id_branch_type`");
+    $this->db->execute("ALTER TABLE `ohs_branches` DROP FOREIGN KEY `fk__ohs_branches__id_customer`");
+    $this->db->execute("ALTER TABLE `ohs_branches` DROP FOREIGN KEY `fk__ohs_branches__id_owner`");
+    $this->db->execute("ALTER TABLE `ohs_branches` DROP FOREIGN KEY `fk__ohs_branches__id_branch_type`");
   }
 }

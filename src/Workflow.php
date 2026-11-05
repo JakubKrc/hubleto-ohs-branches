@@ -1,6 +1,6 @@
 <?php
 
-namespace Hubleto\App\External\WaiBlue\HlthcrBranches;
+namespace Hubleto\App\External\WaiBlue\OhsBranches;
 
 /**
  * Deficiencies on the Workflow kanban board, grouped by status.
@@ -12,7 +12,7 @@ class Workflow extends \Hubleto\App\Community\Workflow\Workflow
     /** @var Models\Deficiency */
     $mDeficiency = $this->getModel(Models\Deficiency::class);
     $query = $mDeficiency->record->prepareReadQuery()
-      ->where('hlthcr_deficiencies.id_workflow', $idWorkflow)
+      ->where('ohs_deficiencies.id_workflow', $idWorkflow)
       ->with(['BRANCH'])
     ;
 
@@ -20,7 +20,7 @@ class Workflow extends \Hubleto\App\Community\Workflow\Workflow
     $idOwner = (int) ($filters['fOwner'] ?? 0);
     if ($idOwner > 0) {
       $branchIdsOfOwner = $this->getModel(Models\Branch::class)->record->where('id_owner', $idOwner)->pluck('id');
-      $query = $query->whereIn('hlthcr_deficiencies.id_branch', $branchIdsOfOwner);
+      $query = $query->whereIn('ohs_deficiencies.id_branch', $branchIdsOfOwner);
     }
 
     $deficiencies = $query->get()->toArray();
@@ -29,7 +29,7 @@ class Workflow extends \Hubleto\App\Community\Workflow\Workflow
     foreach ($deficiencies as $deficiency) {
       $deficiency['_WORKFLOW_ITEM_TITLE'] = mb_substr((string) $deficiency['description'], 0, 80);
       $deficiency['_WORKFLOW_ITEM_SUBTITLE'] = $deficiency['BRANCH']['name'] ?? '';
-      $deficiency['_DETAIL_URL'] = 'hlthcr-branches/deficiencies/' . $deficiency['id'];
+      $deficiency['_DETAIL_URL'] = 'ohs/branches/deficiencies/' . $deficiency['id'];
       $deficiency['_DETAIL_VIEW'] = '@Hubleto:App:Community:Workflow/WorkflowItemDetail.twig';
       $items[] = $deficiency;
     }

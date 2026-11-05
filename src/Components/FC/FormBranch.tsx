@@ -9,7 +9,7 @@ import TableDeficiencies from './TableDeficiencies';
 import CategorisationTab from './CategorisationTab';
 
 const componentName = 'FormBranch';
-const parentApp = 'Hubleto/App/External/WaiBlue/HlthcrBranches';
+const parentApp = 'Hubleto/App/External/WaiBlue/OhsBranches';
 const T = new Translator(parentApp + '/Loader', 'Components/' + componentName);
 
 // Both legacy apps show the nurse notes to nurses only (the server sends them only to nurses).
@@ -70,7 +70,7 @@ const FormBranch = (props: FormProps) => <Form
   componentName={componentName}
   parentApp={parentApp}
   model={parentApp + '/Models/Branch'}
-  urlSlug='hlthcr-branches/branches'
+  urlSlug='ohs/branches/branches'
   title={{field: 'name', sub: T.translate('Branch')}}
   tabs={{
     default: {title: <b>{T.translate('Branch')}</b>, content: () => <TabDefault />},

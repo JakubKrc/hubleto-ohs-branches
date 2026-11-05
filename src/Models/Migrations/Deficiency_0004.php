@@ -1,8 +1,8 @@
 <?php
 
-namespace Hubleto\App\External\WaiBlue\HlthcrBranches\Models\Migrations;
+namespace Hubleto\App\External\WaiBlue\OhsBranches\Models\Migrations;
 
-use Hubleto\App\External\WaiBlue\HlthcrBranches\Loader;
+use Hubleto\App\External\WaiBlue\OhsBranches\Loader;
 use Hubleto\Framework\Migration;
 
 // Existing installs: the fourth deficiency state "Nesplnený" ("php hubleto migrate" does not run installApp()).

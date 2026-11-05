@@ -1,15 +1,15 @@
 <?php
 
-namespace Hubleto\App\External\WaiBlue\HlthcrBranches\Models\RecordManagers;
+namespace Hubleto\App\External\WaiBlue\OhsBranches\Models\RecordManagers;
 
-use Hubleto\App\External\WaiBlue\HlthcrCore\Models\RecordManagers\Clinic;
+use Hubleto\App\External\WaiBlue\OhsCore\Models\RecordManagers\Clinic;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class BranchHasClinic extends \Hubleto\Erp\RecordManager
 {
   use Traits\BelongsToBranch;
 
-  public $table = 'hlthcr_branch_has_clinics';
+  public $table = 'ohs_branch_has_clinics';
 
   public function BRANCH(): BelongsTo
   {

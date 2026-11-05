@@ -1,10 +1,10 @@
 <?php
 
-namespace Hubleto\App\External\WaiBlue\HlthcrBranches\Services;
+namespace Hubleto\App\External\WaiBlue\OhsBranches\Services;
 
-use Hubleto\App\External\WaiBlue\HlthcrBranches\Models\Branch;
-use Hubleto\App\External\WaiBlue\HlthcrBranches\Models\Job;
-use Hubleto\App\External\WaiBlue\HlthcrBranches\Models\JobHasHazard;
+use Hubleto\App\External\WaiBlue\OhsBranches\Models\Branch;
+use Hubleto\App\External\WaiBlue\OhsBranches\Models\Job;
+use Hubleto\App\External\WaiBlue\OhsBranches\Models\JobHasHazard;
 
 /**
  * Builds the "categorisation of work" of a branch: job positions x the hazards they have, with levels.
@@ -17,7 +17,7 @@ class CategorisationMatrix extends \Hubleto\Erp\Core
    */
   public function build(int $idBranch): ?array
   {
-    $branch = $this->getModel(Branch::class)->record->prepareReadQuery()->where('hlthcr_branches.id', $idBranch)->first();
+    $branch = $this->getModel(Branch::class)->record->prepareReadQuery()->where('ohs_branches.id', $idBranch)->first();
     if (!$branch) return null;
 
     /** @var HazardsByType */
@@ -65,7 +65,7 @@ class CategorisationMatrix extends \Hubleto\Erp\Core
   {
     $jobHazards = $this->getModel(JobHasHazard::class)->record
       ->whereIn('id_job', function ($jobsOfBranch) use ($idBranch) {
-        $jobsOfBranch->select('id')->from('hlthcr_jobs')->where('id_branch', $idBranch);
+        $jobsOfBranch->select('id')->from('ohs_jobs')->where('id_branch', $idBranch);
       })
       ->get()
     ;

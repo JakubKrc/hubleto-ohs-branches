@@ -1,14 +1,14 @@
 <?php
 
-namespace Hubleto\App\External\WaiBlue\HlthcrBranches\Models\RecordManagers;
+namespace Hubleto\App\External\WaiBlue\OhsBranches\Models\RecordManagers;
 
-use Hubleto\App\External\WaiBlue\HlthcrCore\Models\RecordManagers\Traits\OffersActiveRecords;
+use Hubleto\App\External\WaiBlue\OhsCore\Models\RecordManagers\Traits\OffersActiveRecords;
 
 class BranchType extends \Hubleto\Erp\RecordManager
 {
   use OffersActiveRecords;
 
-  public $table = 'hlthcr_branch_types';
+  public $table = 'ohs_branch_types';
 
   public function prepareReadQuery(mixed $query = null, int $level = 0, array|null $includeRelations = null): mixed
   {

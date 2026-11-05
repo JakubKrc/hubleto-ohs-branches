@@ -7,7 +7,7 @@ interface TableDeficienciesProps extends TableProps {
 }
 
 const componentName = 'TableDeficiencies'
-const parentApp = 'Hubleto/App/External/WaiBlue/HlthcrBranches'
+const parentApp = 'Hubleto/App/External/WaiBlue/OhsBranches'
 
 const TableDeficiencies = (props: TableDeficienciesProps) => {
   const idBranch = props.idBranch ?? 0;
@@ -15,7 +15,7 @@ const TableDeficiencies = (props: TableDeficienciesProps) => {
     componentName={componentName}
     parentApp={parentApp}
     model={parentApp + '/Models/Deficiency'}
-    baseUrlSlug='hlthcr-branches/deficiencies'
+    baseUrlSlug='ohs/branches/deficiencies'
     endpointParams={{idBranch: idBranch}}
     formDefaultValues={idBranch > 0 ? {id_branch: idBranch} : {}}
     formModalProps={{type: 'right wide'}}

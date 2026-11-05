@@ -1,10 +1,10 @@
 <?php
 
-namespace Hubleto\App\External\WaiBlue\HlthcrBranches\Models\RecordManagers;
+namespace Hubleto\App\External\WaiBlue\OhsBranches\Models\RecordManagers;
 
 use Hubleto\App\Community\Workflow\Models\RecordManagers\Workflow;
 use Hubleto\App\Community\Workflow\Models\RecordManagers\WorkflowStep;
-use Hubleto\App\External\WaiBlue\HlthcrCore\Models\RecordManagers\Traits\WorkRecord;
+use Hubleto\App\External\WaiBlue\OhsCore\Models\RecordManagers\Traits\WorkRecord;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Deficiency extends \Hubleto\Erp\RecordManager
@@ -12,7 +12,7 @@ class Deficiency extends \Hubleto\Erp\RecordManager
   use Traits\BelongsToBranch;
   use WorkRecord;
 
-  public $table = 'hlthcr_deficiencies';
+  public $table = 'ohs_deficiencies';
 
   public function BRANCH(): BelongsTo
   {

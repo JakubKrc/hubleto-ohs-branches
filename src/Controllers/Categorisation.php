@@ -1,8 +1,8 @@
 <?php
 
-namespace Hubleto\App\External\WaiBlue\HlthcrBranches\Controllers;
+namespace Hubleto\App\External\WaiBlue\OhsBranches\Controllers;
 
-use Hubleto\App\External\WaiBlue\HlthcrBranches\Services\CategorisationMatrix;
+use Hubleto\App\External\WaiBlue\OhsBranches\Services\CategorisationMatrix;
 
 /**
  * Printable categorisation of work of one branch (job positions x hazards).
@@ -19,6 +19,6 @@ class Categorisation extends \Hubleto\Erp\Controller
     $this->viewParams['matrix'] = $this->getService(CategorisationMatrix::class)->build($idBranch);
     $this->viewParams['printedOn'] = date('d.m.Y');
 
-    $this->setView('@Hubleto:App:External:WaiBlue:HlthcrBranches/Categorisation.twig');
+    $this->setView('@Hubleto:App:External:WaiBlue:OhsBranches/Categorisation.twig');
   }
 }

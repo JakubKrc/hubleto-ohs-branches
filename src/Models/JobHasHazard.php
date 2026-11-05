@@ -1,9 +1,9 @@
 <?php
 
-namespace Hubleto\App\External\WaiBlue\HlthcrBranches\Models;
+namespace Hubleto\App\External\WaiBlue\OhsBranches\Models;
 
-use Hubleto\App\External\WaiBlue\HlthcrCore\Models\Hazard;
-use Hubleto\App\External\WaiBlue\HlthcrCore\Models\Traits\HasHazardLevel;
+use Hubleto\App\External\WaiBlue\OhsCore\Models\Hazard;
+use Hubleto\App\External\WaiBlue\OhsCore\Models\Traits\HasHazardLevel;
 use Hubleto\Framework\Db\Column\Integer;
 use Hubleto\Framework\Db\Column\Lookup;
 use Hubleto\Framework\Db\Column\Virtual;
@@ -12,7 +12,7 @@ use Hubleto\Framework\Db\Column\Virtual;
  * Level of one catalogue hazard for one job position (one legacy app links them so; the other went through branch hazards).
  * A row means the hazard is present: category 1-4 for work factors, 1 ("yes") for the other types.
  */
-class JobHasHazard extends \Hubleto\App\External\WaiBlue\HlthcrCore\Models\HlthcrModel
+class JobHasHazard extends \Hubleto\App\External\WaiBlue\OhsCore\Models\OhsModel
 {
   use HasHazardLevel;
 
@@ -22,10 +22,10 @@ class JobHasHazard extends \Hubleto\App\External\WaiBlue\HlthcrCore\Models\Hlthc
   const CATEGORY_RISKY = 3;
   const CATEGORY_HIGHEST_RISK = 4;
 
-  public string $table = 'hlthcr_job_has_hazards';
+  public string $table = 'ohs_job_has_hazards';
   public string $recordManagerClass = RecordManagers\JobHasHazard::class;
-  public ?string $lookupSqlValue = '(select name from hlthcr_hazards where hlthcr_hazards.id = {%TABLE%}.id_hazard)';
-  public ?string $lookupUrlDetail = 'hlthcr-branches/job-has-hazards/{%ID%}';
+  public ?string $lookupSqlValue = '(select name from ohs_hazards where ohs_hazards.id = {%TABLE%}.id_hazard)';
+  public ?string $lookupUrlDetail = 'ohs/branches/job-has-hazards/{%ID%}';
 
   public array $relations = [
     'JOB' => [ self::BELONGS_TO, Job::class, 'id_job', 'id' ],

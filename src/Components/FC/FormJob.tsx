@@ -6,7 +6,7 @@ import Input from '@hubleto/react-ui/components/fc/FormComponents/Input';
 import JobHazardLevelsEditor from './JobHazardLevelsEditor';
 
 const componentName = 'FormJob';
-const parentApp = 'Hubleto/App/External/WaiBlue/HlthcrBranches';
+const parentApp = 'Hubleto/App/External/WaiBlue/OhsBranches';
 const T = new Translator(parentApp + '/Loader', 'Components/' + componentName);
 
 const TabHazardLevels = () => {
@@ -30,7 +30,7 @@ const FormJob = (props: FormProps) => <Form
   componentName={componentName}
   parentApp={parentApp}
   model={parentApp + '/Models/Job'}
-  urlSlug='hlthcr-branches/jobs'
+  urlSlug='ohs/branches/jobs'
   title={{field: 'name', sub: T.translate('Job position')}}
   tabs={{
     default: {title: <b>{T.translate('Job position')}</b>, content: () => <TabDefault />},

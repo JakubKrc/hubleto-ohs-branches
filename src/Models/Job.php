@@ -1,9 +1,9 @@
 <?php
 
-namespace Hubleto\App\External\WaiBlue\HlthcrBranches\Models;
+namespace Hubleto\App\External\WaiBlue\OhsBranches\Models;
 
-use Hubleto\App\External\WaiBlue\HlthcrCore\Models\Traits\UsesStoredValues;
-use Hubleto\App\External\WaiBlue\HlthcrCore\Models\Hazard;
+use Hubleto\App\External\WaiBlue\OhsCore\Models\Traits\UsesStoredValues;
+use Hubleto\App\External\WaiBlue\OhsCore\Models\Hazard;
 use Hubleto\Framework\Db\Column\Integer;
 use Hubleto\Framework\Db\Column\Lookup;
 use Hubleto\Framework\Db\Column\Varchar;
@@ -13,16 +13,16 @@ use Hubleto\Framework\Exceptions\RecordSaveException;
 /**
  * Job position at a branch. Its hazard levels decide the work category and the medical exam obligations.
  */
-class Job extends \Hubleto\App\External\WaiBlue\HlthcrCore\Models\HlthcrModel
+class Job extends \Hubleto\App\External\WaiBlue\OhsCore\Models\OhsModel
 {
   use UsesStoredValues;
 
-  public string $table = 'hlthcr_jobs';
+  public string $table = 'ohs_jobs';
   public string $recordManagerClass = RecordManagers\Job::class;
   // With the branch, because every branch has jobs of the same names (review C1).
   public ?string $lookupSqlValue = 'concat({%TABLE%}.name,
-    ifnull(concat(" - ", (select name from hlthcr_branches where hlthcr_branches.id = {%TABLE%}.id_branch)), ""))';
-  public ?string $lookupUrlDetail = 'hlthcr-branches/jobs/{%ID%}';
+    ifnull(concat(" - ", (select name from ohs_branches where ohs_branches.id = {%TABLE%}.id_branch)), ""))';
+  public ?string $lookupUrlDetail = 'ohs/branches/jobs/{%ID%}';
 
   public array $relations = [
     'BRANCH' => [ self::BELONGS_TO, Branch::class, 'id_branch', 'id' ],
@@ -32,8 +32,8 @@ class Job extends \Hubleto\App\External\WaiBlue\HlthcrCore\Models\HlthcrModel
   // The work category of a job: the highest category of its work factors. Empty when it has none.
   public static function getWorkCategorySql(string $jobIdColumn): string
   {
-    return 'select max(jhh.level) from hlthcr_job_has_hazards jhh
-      join hlthcr_hazards h on h.id = jhh.id_hazard
+    return 'select max(jhh.level) from ohs_job_has_hazards jhh
+      join ohs_hazards h on h.id = jhh.id_hazard
       where jhh.id_job = ' . $jobIdColumn . ' and h.type = ' . Hazard::TYPE_FACTOR;
   }
 
@@ -51,7 +51,7 @@ class Job extends \Hubleto\App\External\WaiBlue\HlthcrCore\Models\HlthcrModel
       // The highest category of a work factor on the job (one legacy app computes it the same way).
       'virt_work_category' => (new Virtual($this, $this->translate('Work category')))
         ->setDefaultVisible()
-        ->setProperty('sql', self::getWorkCategorySql('hlthcr_jobs.id'))
+        ->setProperty('sql', self::getWorkCategorySql('ohs_jobs.id'))
       ,
     ]);
   }

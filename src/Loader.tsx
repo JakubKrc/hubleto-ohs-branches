@@ -10,7 +10,7 @@ import TableBranchHasClinics from './Components/FC/TableBranchHasClinics'
 import TableDeficiencies from './Components/FC/TableDeficiencies'
 import TableBranchTypes from './Components/FC/TableBranchTypes'
 
-const parentApp = 'Hubleto/App/External/WaiBlue/HlthcrBranches';
+const parentApp = 'Hubleto/App/External/WaiBlue/OhsBranches';
 const T = new Translator(parentApp + '/Loader', 'Loader');
 
 // "Prevádzky" tab in the customer form (community Customers app).
@@ -24,18 +24,18 @@ function mountCustomerBranchesTab() {
   };
 }
 
-class HlthcrBranchesApp extends App {
+class OhsBranchesApp extends App {
   init() {
     super.init();
-    globalThis.hubleto.registerReactComponent('HlthcrBranchesTableBranches', TableBranches);
-    globalThis.hubleto.registerReactComponent('HlthcrBranchesTableJobs', TableJobs);
-    globalThis.hubleto.registerReactComponent('HlthcrBranchesTableJobHasHazards', TableJobHasHazards);
-    globalThis.hubleto.registerReactComponent('HlthcrBranchesTableBranchHasClinics', TableBranchHasClinics);
-    globalThis.hubleto.registerReactComponent('HlthcrBranchesTableDeficiencies', TableDeficiencies);
-    globalThis.hubleto.registerReactComponent('HlthcrBranchesTableBranchTypes', TableBranchTypes);
+    globalThis.hubleto.registerReactComponent('OhsBranchesTableBranches', TableBranches);
+    globalThis.hubleto.registerReactComponent('OhsBranchesTableJobs', TableJobs);
+    globalThis.hubleto.registerReactComponent('OhsBranchesTableJobHasHazards', TableJobHasHazards);
+    globalThis.hubleto.registerReactComponent('OhsBranchesTableBranchHasClinics', TableBranchHasClinics);
+    globalThis.hubleto.registerReactComponent('OhsBranchesTableDeficiencies', TableDeficiencies);
+    globalThis.hubleto.registerReactComponent('OhsBranchesTableBranchTypes', TableBranchTypes);
 
-    FormCustomizer.addTab('FormCustomer', 'hlthcr-branches', mountCustomerBranchesTab);
+    FormCustomizer.addTab('FormCustomer', 'ohs-branches', mountCustomerBranchesTab);
   }
 }
 
-globalThis.hubleto.registerApp(parentApp, new HlthcrBranchesApp());
+globalThis.hubleto.registerApp(parentApp, new OhsBranchesApp());

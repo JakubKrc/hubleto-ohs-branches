@@ -1,6 +1,6 @@
 <?php
 
-namespace Hubleto\App\External\WaiBlue\HlthcrBranches\Models;
+namespace Hubleto\App\External\WaiBlue\OhsBranches\Models;
 
 use Hubleto\Framework\Db\Column\Boolean;
 use Hubleto\Framework\Db\Column\Varchar;
@@ -9,12 +9,12 @@ use Hubleto\Framework\Db\Column\Varchar;
  * Type of a branch. Both legacy apps have it with different values (categories A-D in one,
  * 38 industries in the other), so it is a code list the administrator edits, empty after install.
  */
-class BranchType extends \Hubleto\App\External\WaiBlue\HlthcrCore\Models\HlthcrModel
+class BranchType extends \Hubleto\App\External\WaiBlue\OhsCore\Models\OhsModel
 {
-  public string $table = 'hlthcr_branch_types';
+  public string $table = 'ohs_branch_types';
   public string $recordManagerClass = RecordManagers\BranchType::class;
   public ?string $lookupSqlValue = '{%TABLE%}.name';
-  public ?string $lookupUrlDetail = 'hlthcr-branches/branch-types/{%ID%}';
+  public ?string $lookupUrlDetail = 'ohs/branches/branch-types/{%ID%}';
 
   public function describeColumns(): array
   {

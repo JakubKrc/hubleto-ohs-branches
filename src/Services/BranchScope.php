@@ -1,12 +1,12 @@
 <?php
 
-namespace Hubleto\App\External\WaiBlue\HlthcrBranches\Services;
+namespace Hubleto\App\External\WaiBlue\OhsBranches\Services;
 
-use Hubleto\App\External\WaiBlue\HlthcrCore\Services\AccessScope;
+use Hubleto\App\External\WaiBlue\OhsCore\Services\AccessScope;
 
 /**
  * Visibility of branches and of records that belong to a branch (jobs, hazards, deficiencies, employees, ...).
- * A branch is owned by its hygienist (hlthcr_branches.id_owner); which user types are restricted comes from AccessScope.
+ * A branch is owned by its hygienist (ohs_branches.id_owner); which user types are restricted comes from AccessScope.
  */
 class BranchScope extends \Hubleto\Erp\Core
 {
@@ -22,7 +22,7 @@ class BranchScope extends \Hubleto\Erp\Core
     $idUser = $this->authProvider()->getUserId();
 
     return $query->whereIn($branchIdColumn, function ($visibleBranches) use ($idUser) {
-      $visibleBranches->select('id')->from('hlthcr_branches')->where('id_owner', $idUser);
+      $visibleBranches->select('id')->from('ohs_branches')->where('id_owner', $idUser);
     });
   }
 }

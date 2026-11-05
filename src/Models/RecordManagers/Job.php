@@ -1,6 +1,6 @@
 <?php
 
-namespace Hubleto\App\External\WaiBlue\HlthcrBranches\Models\RecordManagers;
+namespace Hubleto\App\External\WaiBlue\OhsBranches\Models\RecordManagers;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -9,7 +9,7 @@ class Job extends \Hubleto\Erp\RecordManager
 {
   use Traits\BelongsToBranch;
 
-  public $table = 'hlthcr_jobs';
+  public $table = 'ohs_jobs';
 
   public function BRANCH(): BelongsTo
   {

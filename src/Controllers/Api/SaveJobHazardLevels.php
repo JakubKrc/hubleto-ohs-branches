@@ -1,8 +1,8 @@
 <?php
 
-namespace Hubleto\App\External\WaiBlue\HlthcrBranches\Controllers\Api;
+namespace Hubleto\App\External\WaiBlue\OhsBranches\Controllers\Api;
 
-use Hubleto\App\External\WaiBlue\HlthcrBranches\Services\JobHazardLevels;
+use Hubleto\App\External\WaiBlue\OhsBranches\Services\JobHazardLevels;
 
 class SaveJobHazardLevels extends \Hubleto\Erp\Controllers\ApiController
 {

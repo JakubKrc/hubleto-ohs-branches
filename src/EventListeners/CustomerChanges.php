@@ -1,9 +1,9 @@
 <?php
 
-namespace Hubleto\App\External\WaiBlue\HlthcrBranches\EventListeners;
+namespace Hubleto\App\External\WaiBlue\OhsBranches\EventListeners;
 
 use Hubleto\App\Community\Customers\Models\Customer;
-use Hubleto\App\External\WaiBlue\HlthcrBranches\Models\Branch;
+use Hubleto\App\External\WaiBlue\OhsBranches\Models\Branch;
 use Hubleto\Framework\Interfaces\ModelInterface;
 
 /**

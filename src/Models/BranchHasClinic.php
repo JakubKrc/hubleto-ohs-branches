@@ -1,19 +1,19 @@
 <?php
 
-namespace Hubleto\App\External\WaiBlue\HlthcrBranches\Models;
+namespace Hubleto\App\External\WaiBlue\OhsBranches\Models;
 
-use Hubleto\App\External\WaiBlue\HlthcrCore\Models\Clinic;
+use Hubleto\App\External\WaiBlue\OhsCore\Models\Clinic;
 use Hubleto\Framework\Db\Column\Lookup;
 
 /**
  * Clinic that performs medical exams for employees of a branch.
  */
-class BranchHasClinic extends \Hubleto\App\External\WaiBlue\HlthcrCore\Models\HlthcrModel
+class BranchHasClinic extends \Hubleto\App\External\WaiBlue\OhsCore\Models\OhsModel
 {
-  public string $table = 'hlthcr_branch_has_clinics';
+  public string $table = 'ohs_branch_has_clinics';
   public string $recordManagerClass = RecordManagers\BranchHasClinic::class;
-  public ?string $lookupSqlValue = '(select name from hlthcr_clinics where hlthcr_clinics.id = {%TABLE%}.id_clinic)';
-  public ?string $lookupUrlDetail = 'hlthcr-branches/branch-has-clinics/{%ID%}';
+  public ?string $lookupSqlValue = '(select name from ohs_clinics where ohs_clinics.id = {%TABLE%}.id_clinic)';
+  public ?string $lookupUrlDetail = 'ohs/branches/branch-has-clinics/{%ID%}';
 
   public array $relations = [
     'BRANCH' => [ self::BELONGS_TO, Branch::class, 'id_branch', 'id' ],

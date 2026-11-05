@@ -1,12 +1,12 @@
 <?php
 
-namespace Hubleto\App\External\WaiBlue\HlthcrBranches\Controllers;
+namespace Hubleto\App\External\WaiBlue\OhsBranches\Controllers;
 
 class Deficiencies extends \Hubleto\Erp\Controller
 {
   public function prepareView(): void
   {
     parent::prepareView();
-    $this->setView('@Hubleto:App:External:WaiBlue:HlthcrBranches/Deficiencies.twig');
+    $this->setView('@Hubleto:App:External:WaiBlue:OhsBranches/Deficiencies.twig');
   }
 }

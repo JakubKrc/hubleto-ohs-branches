@@ -4,14 +4,14 @@ import { type FormProps } from '@hubleto/react-ui/components/fc/FormInterfaces';
 import Input from '@hubleto/react-ui/components/fc/FormComponents/Input';
 
 const componentName = 'FormBranchType';
-const parentApp = 'Hubleto/App/External/WaiBlue/HlthcrBranches';
+const parentApp = 'Hubleto/App/External/WaiBlue/OhsBranches';
 const T = new Translator(parentApp + '/Loader', 'Components/' + componentName);
 
 const FormBranchType = (props: FormProps) => <Form
   componentName={componentName}
   parentApp={parentApp}
   model={parentApp + '/Models/BranchType'}
-  urlSlug='hlthcr-branches/branch-types'
+  urlSlug='ohs/branches/branch-types'
   title={{field: 'name', sub: T.translate('Branch type')}}
   tabs={{default: {content: () => <div className='grid grid-cols-1 gap-2'>
     <Input field='name' />

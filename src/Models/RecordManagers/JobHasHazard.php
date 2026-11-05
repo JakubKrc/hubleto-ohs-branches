@@ -1,14 +1,14 @@
 <?php
 
-namespace Hubleto\App\External\WaiBlue\HlthcrBranches\Models\RecordManagers;
+namespace Hubleto\App\External\WaiBlue\OhsBranches\Models\RecordManagers;
 
-use Hubleto\App\External\WaiBlue\HlthcrBranches\Services\BranchScope;
-use Hubleto\App\External\WaiBlue\HlthcrCore\Models\RecordManagers\Hazard;
+use Hubleto\App\External\WaiBlue\OhsBranches\Services\BranchScope;
+use Hubleto\App\External\WaiBlue\OhsCore\Models\RecordManagers\Hazard;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class JobHasHazard extends \Hubleto\Erp\RecordManager
 {
-  public $table = 'hlthcr_job_has_hazards';
+  public $table = 'ohs_job_has_hazards';
 
   public function JOB(): BelongsTo
   {
@@ -41,9 +41,9 @@ class JobHasHazard extends \Hubleto\Erp\RecordManager
     $branchScope = $hubleto->getService(BranchScope::class);
 
     return $query->whereIn($this->table . '.id_job', function ($visibleJobs) use ($branchScope) {
-      $visibleJobs->select('hlthcr_jobs.id')->from('hlthcr_jobs');
+      $visibleJobs->select('ohs_jobs.id')->from('ohs_jobs');
       // The subquery builder is changed in place, so the returned value is not needed.
-      $branchScope->restrictToVisibleBranches($visibleJobs, 'hlthcr_jobs.id_branch');
+      $branchScope->restrictToVisibleBranches($visibleJobs, 'ohs_jobs.id_branch');
     });
   }
 

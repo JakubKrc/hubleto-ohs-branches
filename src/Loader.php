@@ -1,39 +1,39 @@
 <?php
 
-namespace Hubleto\App\External\WaiBlue\HlthcrBranches;
+namespace Hubleto\App\External\WaiBlue\OhsBranches;
 
 use Hubleto\App\Community\Customers\Models\Customer;
 use Hubleto\App\Community\Workflow\Models\Workflow as WorkflowModel;
 use Hubleto\App\Community\Workflow\Models\WorkflowStep;
-use Hubleto\App\External\WaiBlue\HlthcrCore\Models\Clinic;
-use Hubleto\App\External\WaiBlue\HlthcrCore\Models\Hazard;
-use Hubleto\App\External\WaiBlue\HlthcrCore\Services\DemoData;
+use Hubleto\App\External\WaiBlue\OhsCore\Models\Clinic;
+use Hubleto\App\External\WaiBlue\OhsCore\Models\Hazard;
+use Hubleto\App\External\WaiBlue\OhsCore\Services\DemoData;
 
-class Loader extends \Hubleto\App\External\WaiBlue\HlthcrCore\HlthcrApp
+class Loader extends \Hubleto\App\External\WaiBlue\OhsCore\OhsApp
 {
   // Tags of the deficiency workflow steps; a deficiency's status is the tag of its step.
-  const DEFICIENCY_STEP_NEW = 'hlthcr-deficiency-new';
-  const DEFICIENCY_STEP_IN_PROGRESS = 'hlthcr-deficiency-in-progress';
-  const DEFICIENCY_STEP_RESOLVED = 'hlthcr-deficiency-resolved';
-  const DEFICIENCY_STEP_NOT_FULFILLED = 'hlthcr-deficiency-not-fulfilled';
+  const DEFICIENCY_STEP_NEW = 'ohs-deficiency-new';
+  const DEFICIENCY_STEP_IN_PROGRESS = 'ohs-deficiency-in-progress';
+  const DEFICIENCY_STEP_RESOLVED = 'ohs-deficiency-resolved';
+  const DEFICIENCY_STEP_NOT_FULFILLED = 'ohs-deficiency-not-fulfilled';
 
   public function init(): void
   {
     parent::init();
 
     $this->router()->get([
-      '/^hlthcr-branches\/?$/' => Controllers\Home::class,
-      '/^hlthcr-branches\/settings\/?$/' => Controllers\Settings::class,
-      '/^hlthcr-branches\/branches\/(?<idBranch>\d+)\/categorisation\/?$/' => Controllers\Categorisation::class,
-      '/^hlthcr-branches\/api\/get-job-hazard-levels\/?$/' => Controllers\Api\GetJobHazardLevels::class,
-      '/^hlthcr-branches\/api\/save-job-hazard-levels\/?$/' => Controllers\Api\SaveJobHazardLevels::class,
+      '/^ohs\/branches\/?$/' => Controllers\Home::class,
+      '/^ohs\/branches\/settings\/?$/' => Controllers\Settings::class,
+      '/^ohs\/branches\/branches\/(?<idBranch>\d+)\/categorisation\/?$/' => Controllers\Categorisation::class,
+      '/^ohs\/branches\/api\/get-job-hazard-levels\/?$/' => Controllers\Api\GetJobHazardLevels::class,
+      '/^ohs\/branches\/api\/save-job-hazard-levels\/?$/' => Controllers\Api\SaveJobHazardLevels::class,
     ]);
-    $this->router()->crud('hlthcr-branches/branches', Controllers\Branches::class);
-    $this->router()->crud('hlthcr-branches/branch-types', Controllers\BranchTypes::class);
-    $this->router()->crud('hlthcr-branches/jobs', Controllers\Jobs::class);
-    $this->router()->crud('hlthcr-branches/job-has-hazards', Controllers\JobHasHazards::class);
-    $this->router()->crud('hlthcr-branches/branch-has-clinics', Controllers\BranchHasClinics::class);
-    $this->router()->crud('hlthcr-branches/deficiencies', Controllers\Deficiencies::class);
+    $this->router()->crud('ohs/branches/branches', Controllers\Branches::class);
+    $this->router()->crud('ohs/branches/branch-types', Controllers\BranchTypes::class);
+    $this->router()->crud('ohs/branches/jobs', Controllers\Jobs::class);
+    $this->router()->crud('ohs/branches/job-has-hazards', Controllers\JobHasHazards::class);
+    $this->router()->crud('ohs/branches/branch-has-clinics', Controllers\BranchHasClinics::class);
+    $this->router()->crud('ohs/branches/deficiencies', Controllers\Deficiencies::class);
 
     $this->addSearchSwitch('p', 'branches');
 
@@ -51,7 +51,7 @@ class Loader extends \Hubleto\App\External\WaiBlue\HlthcrCore\HlthcrApp
     $settingsApp->addSetting($this, [
       'title' => $this->translate('Branch types'),
       'icon' => 'fas fa-tags',
-      'url' => 'hlthcr-branches/branch-types',
+      'url' => 'ohs/branches/branch-types',
     ]);
   }
 
@@ -125,9 +125,9 @@ class Loader extends \Hubleto\App\External\WaiBlue\HlthcrCore\HlthcrApp
 
     foreach ($expressions as $expression) {
       $branchesQuery = $branchesQuery->where(function ($matchingBranch) use ($expression) {
-        $matchingBranch->orWhere('hlthcr_branches.name', 'like', '%' . $expression . '%');
-        $matchingBranch->orWhere('hlthcr_branches.city', 'like', '%' . $expression . '%');
-        $matchingBranch->orWhere('hlthcr_branches.street', 'like', '%' . $expression . '%');
+        $matchingBranch->orWhere('ohs_branches.name', 'like', '%' . $expression . '%');
+        $matchingBranch->orWhere('ohs_branches.city', 'like', '%' . $expression . '%');
+        $matchingBranch->orWhere('ohs_branches.street', 'like', '%' . $expression . '%');
       });
     }
 
@@ -136,20 +136,20 @@ class Loader extends \Hubleto\App\External\WaiBlue\HlthcrCore\HlthcrApp
       $results[] = [
         'id' => $branch['id'],
         'label' => $branch['name'],
-        'url' => 'hlthcr-branches/branches/' . $branch['id'],
+        'url' => 'ohs/branches/branches/' . $branch['id'],
         'description' => trim(($branch['street'] ?? '') . ' ' . ($branch['city'] ?? '')),
       ];
     }
 
     $jobsQuery = $this->getModel(Models\Job::class)->record->prepareReadQuery()->with('BRANCH');
     foreach ($expressions as $expression) {
-      $jobsQuery = $jobsQuery->where('hlthcr_jobs.name', 'like', '%' . $expression . '%');
+      $jobsQuery = $jobsQuery->where('ohs_jobs.name', 'like', '%' . $expression . '%');
     }
     foreach ($jobsQuery->limit(20)->get()->toArray() as $job) {
       $results[] = [
         'id' => $job['id'],
         'label' => $job['name'],
-        'url' => 'hlthcr-branches/jobs/' . $job['id'],
+        'url' => 'ohs/branches/jobs/' . $job['id'],
         'description' => $this->translate('Job position') . ', ' . ($job['BRANCH']['name'] ?? ''),
       ];
     }
@@ -161,18 +161,18 @@ class Loader extends \Hubleto\App\External\WaiBlue\HlthcrCore\HlthcrApp
   {
     // Medical staff do not see deficiencies (both legacy apps).
     $deficienciesButton = '';
-    if ($this->getService(\Hubleto\App\External\WaiBlue\HlthcrCore\Services\AccessScope::class)->activeUserSeesWorkRecords()) {
-      $deficienciesButton = $this->secondSidebarButton('hlthcr-branches/deficiencies', 'fas fa-circle-exclamation', $this->translate('Deficiencies'));
+    if ($this->getService(\Hubleto\App\External\WaiBlue\OhsCore\Services\AccessScope::class)->activeUserSeesWorkRecords()) {
+      $deficienciesButton = $this->secondSidebarButton('ohs/branches/deficiencies', 'fas fa-circle-exclamation', $this->translate('Deficiencies'));
     }
 
     return '
       ' . $this->secondSidebarTitle() . '
       <div class="app-sidebar-buttons">
-        ' . $this->secondSidebarButton('hlthcr-branches/branches', 'fas fa-industry', $this->translate('Branches')) . '
-        ' . $this->secondSidebarButton('hlthcr-branches/jobs', 'fas fa-helmet-safety', $this->translate('Job positions')) . '
+        ' . $this->secondSidebarButton('ohs/branches/branches', 'fas fa-industry', $this->translate('Branches')) . '
+        ' . $this->secondSidebarButton('ohs/branches/jobs', 'fas fa-helmet-safety', $this->translate('Job positions')) . '
         ' . $deficienciesButton . '
-        ' . $this->secondSidebarButton('hlthcr-branches/branch-types', 'fas fa-tags', $this->translate('Branch types')) . '
-        ' . $this->secondSidebarButton('hlthcr-branches/settings', 'fas fa-cog', $this->translate('Settings')) . '
+        ' . $this->secondSidebarButton('ohs/branches/branch-types', 'fas fa-tags', $this->translate('Branch types')) . '
+        ' . $this->secondSidebarButton('ohs/branches/settings', 'fas fa-cog', $this->translate('Settings')) . '
       </div>
     ';
   }
@@ -188,7 +188,7 @@ class Loader extends \Hubleto\App\External\WaiBlue\HlthcrCore\HlthcrApp
     return 0;
   }
 
-  public function generateHlthcrDemoData(): void
+  public function generateOhsDemoData(): void
   {
     /** @var Customer */
     $mCustomer = $this->getModel(Customer::class);

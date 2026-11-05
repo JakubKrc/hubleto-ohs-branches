@@ -4,14 +4,14 @@ interface CategorisationTabProps {
   idBranch: number,
 }
 
-const parentApp = 'Hubleto/App/External/WaiBlue/HlthcrBranches';
+const parentApp = 'Hubleto/App/External/WaiBlue/OhsBranches';
 const T = new Translator(parentApp + '/Loader', 'Components/CategorisationTab');
 
 /**
  * Shows the printable categorisation of work (job positions x hazards) of a branch.
  */
 const CategorisationTab = (props: CategorisationTabProps) => {
-  const categorisationUrl = globalThis.hubleto.config.projectUrl + '/hlthcr-branches/branches/' + props.idBranch + '/categorisation';
+  const categorisationUrl = globalThis.hubleto.config.projectUrl + '/ohs/branches/branches/' + props.idBranch + '/categorisation';
 
   return <div className='flex flex-col gap-2 h-full'>
     <div>

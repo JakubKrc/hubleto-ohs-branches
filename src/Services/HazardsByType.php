@@ -1,9 +1,9 @@
 <?php
 
-namespace Hubleto\App\External\WaiBlue\HlthcrBranches\Services;
+namespace Hubleto\App\External\WaiBlue\OhsBranches\Services;
 
-use Hubleto\App\External\WaiBlue\HlthcrBranches\Models\JobHasHazard;
-use Hubleto\App\External\WaiBlue\HlthcrCore\Models\Hazard;
+use Hubleto\App\External\WaiBlue\OhsBranches\Models\JobHasHazard;
+use Hubleto\App\External\WaiBlue\OhsCore\Models\Hazard;
 
 /**
  * Hazards grouped by hazard type: the whole catalogue for the job levels editor,
@@ -29,7 +29,7 @@ class HazardsByType extends \Hubleto\Erp\Core
     $mJobHazard = $this->getModel(JobHasHazard::class);
     $usedHazardIds = $mJobHazard->record
       ->whereIn('id_job', function ($jobsOfBranch) use ($idBranch) {
-        $jobsOfBranch->select('id')->from('hlthcr_jobs')->where('id_branch', $idBranch);
+        $jobsOfBranch->select('id')->from('ohs_jobs')->where('id_branch', $idBranch);
       })
       ->pluck('id_hazard')
       ->toArray()

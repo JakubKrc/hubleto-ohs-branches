@@ -5,7 +5,7 @@ import { type FormProps } from '@hubleto/react-ui/components/fc/FormInterfaces';
 import Input from '@hubleto/react-ui/components/fc/FormComponents/Input';
 
 const componentName = 'FormDeficiency';
-const parentApp = 'Hubleto/App/External/WaiBlue/HlthcrBranches';
+const parentApp = 'Hubleto/App/External/WaiBlue/OhsBranches';
 const T = new Translator(parentApp + '/Loader', 'Components/' + componentName);
 
 // The branch stays as created (the server keeps it), so it is read-only after saving
@@ -25,7 +25,7 @@ const FormDeficiency = (props: FormProps) => <Form
   componentName={componentName}
   parentApp={parentApp}
   model={parentApp + '/Models/Deficiency'}
-  urlSlug='hlthcr-branches/deficiencies'
+  urlSlug='ohs/branches/deficiencies'
   title={{field: 'description', sub: T.translate('Deficiency')}}
   tabs={{default: {content: () => <TabDefault />}}}
   {...props}
