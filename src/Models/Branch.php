@@ -5,7 +5,6 @@ namespace Hubleto\App\External\WaiBlue\OhsBranches\Models;
 use Hubleto\App\External\WaiBlue\OhsCore\Controllers\Api\UserLookup;
 use Hubleto\App\Community\Auth\Models\User;
 use Hubleto\App\Community\Customers\Models\Customer;
-use Hubleto\App\External\WaiBlue\OhsCore\Controllers\Api\CustomerLookup;
 use Hubleto\App\External\WaiBlue\OhsCore\Services\Roles;
 use Hubleto\Framework\Db\Column\Boolean;
 use Hubleto\Framework\Db\Column\Date;
@@ -37,8 +36,6 @@ class Branch extends \Hubleto\Erp\Model
       'id_customer' => (new Lookup($this, $this->translate('Client'), Customer::class))
         ->setRequired()
         ->setDefaultVisible()
-        // Only clients visible to the user (the community lookup is not scoped).
-        ->setEndpoint(CustomerLookup::ENDPOINT)
       ,
       'street' => (new Varchar($this, $this->translate('Street')))->setDefaultVisible(),
       'city' => (new Varchar($this, $this->translate('City')))->setDefaultVisible(),
