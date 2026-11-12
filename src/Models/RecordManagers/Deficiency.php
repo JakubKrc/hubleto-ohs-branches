@@ -4,13 +4,11 @@ namespace Hubleto\App\External\WaiBlue\OhsBranches\Models\RecordManagers;
 
 use Hubleto\App\Community\Workflow\Models\RecordManagers\Workflow;
 use Hubleto\App\Community\Workflow\Models\RecordManagers\WorkflowStep;
-use Hubleto\App\External\WaiBlue\OhsCore\Models\RecordManagers\Traits\WorkRecord;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Deficiency extends \Hubleto\Erp\RecordManager
 {
   use Traits\BelongsToBranch;
-  use WorkRecord;
 
   public $table = 'ohs_deficiencies';
 
@@ -27,21 +25,6 @@ class Deficiency extends \Hubleto\Erp\RecordManager
   public function WORKFLOW_STEP(): BelongsTo
   {
     return $this->belongsTo(WorkflowStep::class, 'id_workflow_step', 'id');
-  }
-
-  public function prepareReadQuery(mixed $query = null, int $level = 0, array|null $includeRelations = null): mixed
-  {
-    $query = parent::prepareReadQuery($query, $level, $includeRelations);
-    $query = $this->restrictToWorkRecordReaders($query);
-    return $this->restrictToVisibleBranches($query);
-  }
-
-  // Dropdowns too: Hubleto's lookup query does not go through prepareReadQuery.
-  public function prepareLookupQuery(string $search): mixed
-  {
-    $query = parent::prepareLookupQuery($search);
-    $query = $this->restrictToWorkRecordReaders($query);
-    return $this->restrictToVisibleBranches($query);
   }
 
   public function addUrlFiltersToQuery(mixed $query): mixed

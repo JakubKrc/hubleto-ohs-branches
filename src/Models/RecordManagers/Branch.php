@@ -5,8 +5,6 @@ namespace Hubleto\App\External\WaiBlue\OhsBranches\Models\RecordManagers;
 use Hubleto\App\Community\Auth\Models\RecordManagers\User;
 use Hubleto\App\Community\Customers\Models\RecordManagers\Customer;
 use Hubleto\App\External\WaiBlue\OhsCore\Models\RecordManagers\Traits\OffersActiveRecords;
-use Hubleto\App\External\WaiBlue\OhsBranches\Services\BranchScope;
-use Hubleto\App\External\WaiBlue\OhsCore\Services\Roles;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -41,18 +39,16 @@ class Branch extends \Hubleto\Erp\RecordManager
     return $this->hasMany(Job::class, 'id_branch', 'id');
   }
 
-  // The same rule as for jobs and everything else under a branch (BranchScope, by Ohs role). Hubleto's parent
-  // would limit by user type because of id_owner, so it is left out (branches have no junctions).
+  // Everybody sees all branches. Hubleto's parent would limit them by user type because of id_owner,
+  // so it is left out (branches have no junctions).
   public function prepareReadQuery(mixed $query = null, int $level = 0, array|null $includeRelations = null): mixed
   {
-    $query = \Hubleto\Framework\RecordManager::prepareReadQuery($query, $level, $includeRelations);
-    return $this->restrictToVisibleBranches($query);
+    return \Hubleto\Framework\RecordManager::prepareReadQuery($query, $level, $includeRelations);
   }
 
   public function prepareLookupQuery(string $search): mixed
   {
     $query = parent::prepareLookupQuery($search);
-    $query = $this->restrictToVisibleBranches($query);
 
     $hubleto = \Hubleto\Erp\Loader::getGlobalApp();
 
@@ -89,31 +85,6 @@ class Branch extends \Hubleto\Erp\RecordManager
   public function restrictToOfferedRecords(mixed $query): mixed
   {
     return $this->restrictToActiveOrChosen($query, 'id_branch');
-  }
-
-  // Only nurses read the nurse notes; others get NULL, so the list search cannot find branches by the notes either.
-  public function prepareSelectsForReadQuery(mixed $query = null, int $level = 0, array|null $includeRelations = null): array
-  {
-    $selects = parent::prepareSelectsForReadQuery($query, $level, $includeRelations);
-
-    $hubleto = \Hubleto\Erp\Loader::getGlobalApp();
-    /** @var Roles */
-    $roles = $hubleto->getService(Roles::class);
-    if ($roles->activeUserHasRole(Roles::NURSE)) return $selects;
-
-    $nurseNotesSelect = $this->table . '.nurse_notes';
-    foreach ($selects as $index => $select) {
-      if ($select == $nurseNotesSelect) $selects[$index] = 'NULL as nurse_notes';
-    }
-    return $selects;
-  }
-
-  private function restrictToVisibleBranches(mixed $query): mixed
-  {
-    $hubleto = \Hubleto\Erp\Loader::getGlobalApp();
-    /** @var BranchScope */
-    $branchScope = $hubleto->getService(BranchScope::class);
-    return $branchScope->restrictToVisibleBranches($query, $this->table . '.id');
   }
 
   public function prepareLookupData(array $dataRaw): array

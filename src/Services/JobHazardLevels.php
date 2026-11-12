@@ -5,7 +5,6 @@ namespace Hubleto\App\External\WaiBlue\OhsBranches\Services;
 use Hubleto\App\External\WaiBlue\OhsBranches\Models\Job;
 use Hubleto\App\External\WaiBlue\OhsBranches\Models\JobHasHazard;
 use Hubleto\App\External\WaiBlue\OhsCore\Models\Hazard;
-use Hubleto\App\External\WaiBlue\OhsCore\Services\RecordWriteGuard;
 
 /**
  * Reads and saves the hazard levels of one job position: one level per hazard of the catalogue (as in one legacy app).
@@ -41,23 +40,11 @@ class JobHazardLevels extends \Hubleto\Erp\Core
     return $hazardTypes;
   }
 
-  // The same rule as for Hubleto's generic save (for example medical staff see the levels read-only).
-  public function mayActiveUserChangeLevels(): bool
-  {
-    /** @var RecordWriteGuard */
-    $recordWriteGuard = $this->getService(RecordWriteGuard::class);
-    return $recordWriteGuard->mayActiveUserChangeModel(JobHasHazard::class);
-  }
-
   /**
    * Saves [idHazard => level]. Level 0 removes the row. Unknown hazards are ignored.
    */
   public function saveLevels(int $idJob, array $levelsByHazard): void
   {
-    if (!$this->mayActiveUserChangeLevels()) {
-      throw new \Exception('You may not change the hazard levels.');
-    }
-
     $job = $this->getModel(Job::class)->record->prepareReadQuery()->where('ohs_jobs.id', $idJob)->first();
     if (!$job) {
       throw new \Exception('Job position not found.');

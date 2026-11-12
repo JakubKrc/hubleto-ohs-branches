@@ -27,11 +27,16 @@ class Deficiency_0001 extends Migration
 
   public function upgradeForeignKeys(): void
   {
-    $this->db->execute("ALTER TABLE `ohs_deficiencies` ADD CONSTRAINT `fk__ohs_deficiencies__id_branch` FOREIGN KEY (`id_branch`) REFERENCES `ohs_branches` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT");
+    // A branch with deficiencies cannot be deleted (both legacy apps); branches are deactivated instead.
+    $this->db->execute("ALTER TABLE `ohs_deficiencies` ADD CONSTRAINT `fk__ohs_deficiencies__id_branch` FOREIGN KEY (`id_branch`) REFERENCES `ohs_branches` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT");
+    $this->db->execute("ALTER TABLE `ohs_deficiencies` ADD CONSTRAINT `fk__ohs_deficiencies__id_workflow` FOREIGN KEY (`id_workflow`) REFERENCES `workflows` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT");
+    $this->db->execute("ALTER TABLE `ohs_deficiencies` ADD CONSTRAINT `fk__ohs_deficiencies__id_workflow_step` FOREIGN KEY (`id_workflow_step`) REFERENCES `workflow_steps` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT");
   }
 
   public function downgradeForeignKeys(): void
   {
     $this->db->execute("ALTER TABLE `ohs_deficiencies` DROP FOREIGN KEY `fk__ohs_deficiencies__id_branch`");
+    $this->db->execute("ALTER TABLE `ohs_deficiencies` DROP FOREIGN KEY `fk__ohs_deficiencies__id_workflow`");
+    $this->db->execute("ALTER TABLE `ohs_deficiencies` DROP FOREIGN KEY `fk__ohs_deficiencies__id_workflow_step`");
   }
 }

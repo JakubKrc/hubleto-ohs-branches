@@ -8,7 +8,7 @@ use Hubleto\Framework\Db\Column\Lookup;
 /**
  * Clinic that performs medical exams for employees of a branch.
  */
-class BranchHasClinic extends \Hubleto\App\External\WaiBlue\OhsCore\Models\OhsModel
+class BranchHasClinic extends \Hubleto\Erp\Model
 {
   public string $table = 'ohs_branch_has_clinics';
   public string $recordManagerClass = RecordManagers\BranchHasClinic::class;

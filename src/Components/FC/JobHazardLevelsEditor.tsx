@@ -35,7 +35,6 @@ const JobHazardLevelsEditor = (props: JobHazardLevelsEditorProps) => {
   const [hazardTypes, setHazardTypes] = React.useState<Array<HazardTypeGroup>>([]);
   const [levels, setLevels] = React.useState<Record<number, number>>({});
   const [isLoaded, setIsLoaded] = React.useState(false);
-  const [mayChange, setMayChange] = React.useState(false);
   const [saveMessage, setSaveMessage] = React.useState('');
 
   function applyLoadedLevels(response: any) {
@@ -48,7 +47,6 @@ const JobHazardLevelsEditor = (props: JobHazardLevelsEditorProps) => {
     }
     setHazardTypes(loadedHazardTypes);
     setLevels(loadedLevels);
-    setMayChange(response.mayChange === true);
     setIsLoaded(true);
   }
 
@@ -83,14 +81,12 @@ const JobHazardLevelsEditor = (props: JobHazardLevelsEditorProps) => {
       return <input
         type='checkbox'
         checked={currentLevel !== LEVEL_NOT_SET}
-        disabled={!mayChange}
         onChange={(event) => changeLevel(hazard.id_hazard, event.target.checked ? LEVEL_YES : LEVEL_NOT_SET)}
       />;
     }
 
     return <select
       value={currentLevel}
-      disabled={!mayChange}
       onChange={(event) => changeLevel(hazard.id_hazard, parseInt(event.target.value))}
     >
       {CATEGORY_LEVELS.map((level) => <option key={level} value={level}>
@@ -115,13 +111,13 @@ const JobHazardLevelsEditor = (props: JobHazardLevelsEditorProps) => {
         </table>
       </div>
     </div>)}
-    {mayChange ? <div className='flex gap-2 items-center'>
+    <div className='flex gap-2 items-center'>
       <button className='btn btn-primary' onClick={saveLevels}>
         <span className='icon'><i className='fas fa-save'></i></span>
         <span className='text'>{T.translate('Save hazard levels')}</span>
       </button>
       {saveMessage !== '' ? <span>{saveMessage}</span> : null}
-    </div> : null}
+    </div>
   </div>;
 }
 

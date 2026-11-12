@@ -13,7 +13,8 @@ class Job_0001 extends Migration
       `name` varchar(255) NOT NULL,
       `id_branch` int(8) NULL DEFAULT NULL,
       `exam_interval_months` int(8) NULL DEFAULT NULL,
-      INDEX `id_branch` (`id_branch`)
+      INDEX `id_branch` (`id_branch`),
+      UNIQUE INDEX `branch_job_name` (`id_branch`, `name`)
     ) ENGINE=InnoDB");
   }
 
@@ -24,7 +25,8 @@ class Job_0001 extends Migration
 
   public function upgradeForeignKeys(): void
   {
-    $this->db->execute("ALTER TABLE `ohs_jobs` ADD CONSTRAINT `fk__ohs_jobs__id_branch` FOREIGN KEY (`id_branch`) REFERENCES `ohs_branches` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT");
+    // A branch with job positions cannot be deleted (both legacy apps); branches are deactivated instead.
+    $this->db->execute("ALTER TABLE `ohs_jobs` ADD CONSTRAINT `fk__ohs_jobs__id_branch` FOREIGN KEY (`id_branch`) REFERENCES `ohs_branches` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT");
   }
 
   public function downgradeForeignKeys(): void

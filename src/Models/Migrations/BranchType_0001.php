@@ -11,7 +11,9 @@ class BranchType_0001 extends Migration
     $this->db->execute("CREATE TABLE IF NOT EXISTS `ohs_branch_types` (
       `id` int(8) primary key auto_increment,
       `name` varchar(255) NOT NULL,
-      UNIQUE INDEX `name` (`name`)
+      `is_active` tinyint(1) NOT NULL DEFAULT 1,
+      UNIQUE INDEX `name` (`name`),
+      INDEX `is_active` (`is_active`)
     ) ENGINE=InnoDB");
   }
 

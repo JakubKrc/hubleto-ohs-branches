@@ -16,7 +16,6 @@ class GetJobHazardLevels extends \Hubleto\Erp\Controllers\ApiController
     return [
       'status' => 'success',
       'hazardTypes' => $jobHazardLevels->getLevelsGroupedByHazardType($idJob),
-      'mayChange' => $jobHazardLevels->mayActiveUserChangeLevels(),
     ];
   }
 }

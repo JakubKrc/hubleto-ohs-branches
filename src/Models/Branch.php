@@ -3,8 +3,6 @@
 namespace Hubleto\App\External\WaiBlue\OhsBranches\Models;
 
 use Hubleto\App\External\WaiBlue\OhsCore\Controllers\Api\UserLookup;
-use Hubleto\App\External\WaiBlue\OhsCore\Models\Traits\EmptyDatesAsNull;
-use Hubleto\App\External\WaiBlue\OhsCore\Models\Traits\UsesStoredValues;
 use Hubleto\App\Community\Auth\Models\User;
 use Hubleto\App\Community\Customers\Models\Customer;
 use Hubleto\App\External\WaiBlue\OhsCore\Controllers\Api\CustomerLookup;
@@ -16,10 +14,8 @@ use Hubleto\Framework\Db\Column\Lookup;
 use Hubleto\Framework\Db\Column\Text;
 use Hubleto\Framework\Db\Column\Varchar;
 
-class Branch extends \Hubleto\App\External\WaiBlue\OhsCore\Models\OhsModel
+class Branch extends \Hubleto\Erp\Model
 {
-  use EmptyDatesAsNull;
-  use UsesStoredValues;
   public string $table = 'ohs_branches';
   public string $recordManagerClass = RecordManagers\Branch::class;
   // With the client, because branch names are unique only per client (review C1).
@@ -89,8 +85,6 @@ class Branch extends \Hubleto\App\External\WaiBlue\OhsCore\Models\OhsModel
   {
     $description = parent::describeForm();
     $description->defaultValues['is_active'] = true;
-    // Only nurses get the nurse notes input (Hubleto sends only its own ui keys to the form, but all inputs).
-    if (!$this->activeUserIsNurse()) unset($description->inputs['nurse_notes']);
     return $description;
   }
 
@@ -113,7 +107,6 @@ class Branch extends \Hubleto\App\External\WaiBlue\OhsCore\Models\OhsModel
   public function onBeforeCreate(array $record): array
   {
     $record = parent::onBeforeCreate($record);
-    $record = $this->emptyDatesAsNull($record);
 
     if (empty($record['id_owner'])) {
       $record['id_owner'] = $this->getHygienistOfClient((int) ($record['id_customer'] ?? 0));
@@ -129,38 +122,27 @@ class Branch extends \Hubleto\App\External\WaiBlue\OhsCore\Models\OhsModel
   public function onBeforeUpdate(array $record): array
   {
     $record = parent::onBeforeUpdate($record);
-    $record = $this->emptyDatesAsNull($record);
-    // The client stays as created (one legacy app), so the branch's documents and history stay with it.
-    $record = $this->keepStoredValues($record, ['id_customer']);
-    // A save that leaves out a yes/no or number column would store 0 for it (Hubleto), so the stored value is used.
-    $record = $this->addStoredValuesOfMissingColumns($record, ['is_active', 'has_valid_first_aid_training']);
 
-    // Nurse notes are for nurses only (both legacy apps); others do not get them, so they must not overwrite them.
-    if (!$this->activeUserIsNurse()) unset($record['nurse_notes']);
+    $storedBranch = $this->record->where('id', (int) $record['id'])->first();
+    if (!$storedBranch) return $record;
+
+    // The client stays as created (one legacy app), so the branch's documents and history stay with it.
+    $record['id_customer'] = $storedBranch->id_customer;
+
+    // A save that leaves out a yes/no column would store 0 for it (Hubleto), so the stored value is used.
+    if (!array_key_exists('is_active', $record)) {
+      $record['is_active'] = $storedBranch->is_active;
+    }
+    if (!array_key_exists('has_valid_first_aid_training', $record)) {
+      $record['has_valid_first_aid_training'] = $storedBranch->has_valid_first_aid_training;
+    }
 
     // Both legacy apps note the day the first aid validity changed.
-    $originalBranch = $this->record->where('id', (int) $record['id'])->first();
-    $firstAidChanged = $originalBranch && array_key_exists('has_valid_first_aid_training', $record)
-      && (bool) $record['has_valid_first_aid_training'] != (bool) $originalBranch->has_valid_first_aid_training;
+    $firstAidChanged = (bool) $record['has_valid_first_aid_training'] != (bool) $storedBranch->has_valid_first_aid_training;
     if ($firstAidChanged) {
       $record['first_aid_validity_changed_on'] = date('Y-m-d');
     }
     return $record;
-  }
-
-  // Every read (forms, lists, the record API) goes through here.
-  public function onAfterLoadRecord(array $record): array
-  {
-    $record = parent::onAfterLoadRecord($record);
-    if (!$this->activeUserIsNurse()) unset($record['nurse_notes']);
-    return $record;
-  }
-
-  private function activeUserIsNurse(): bool
-  {
-    /** @var Roles */
-    $roles = $this->getService(Roles::class);
-    return $roles->activeUserHasRole(Roles::NURSE);
   }
 
   private function getHygienistOfClient(int $idCustomer): ?int

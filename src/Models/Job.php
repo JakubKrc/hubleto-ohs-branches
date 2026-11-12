@@ -2,7 +2,6 @@
 
 namespace Hubleto\App\External\WaiBlue\OhsBranches\Models;
 
-use Hubleto\App\External\WaiBlue\OhsCore\Models\Traits\UsesStoredValues;
 use Hubleto\App\External\WaiBlue\OhsCore\Models\Hazard;
 use Hubleto\Framework\Db\Column\Integer;
 use Hubleto\Framework\Db\Column\Lookup;
@@ -13,10 +12,8 @@ use Hubleto\Framework\Exceptions\RecordSaveException;
 /**
  * Job position at a branch. Its hazard levels decide the work category and the medical exam obligations.
  */
-class Job extends \Hubleto\App\External\WaiBlue\OhsCore\Models\OhsModel
+class Job extends \Hubleto\Erp\Model
 {
-  use UsesStoredValues;
-
   public string $table = 'ohs_jobs';
   public string $recordManagerClass = RecordManagers\Job::class;
   // With the branch, because every branch has jobs of the same names (review C1).
@@ -67,8 +64,15 @@ class Job extends \Hubleto\App\External\WaiBlue\OhsCore\Models\OhsModel
   public function onBeforeUpdate(array $record): array
   {
     $record = parent::onBeforeUpdate($record);
-    $record = $this->keepStoredValues($record, ['id_branch']);
-    $record = $this->addStoredValuesOfMissingColumns($record, ['name', 'exam_interval_months']);
+
+    $storedJob = $this->record->where('id', (int) $record['id'])->first();
+    if ($storedJob) {
+      $record['id_branch'] = $storedJob->id_branch;
+      // A save may send only some columns, but the checks below need these.
+      if (!array_key_exists('name', $record)) $record['name'] = $storedJob->name;
+      if (!array_key_exists('exam_interval_months', $record)) $record['exam_interval_months'] = $storedJob->exam_interval_months;
+    }
+
     $this->refuseInvalidJob($record);
     return $record;
   }

@@ -75,7 +75,6 @@ class Loader extends \Hubleto\App\External\WaiBlue\OhsCore\OhsApp
    * Creates the deficiency workflow, or adds the steps an older install does not have yet.
    * The first step is the default for new deficiencies.
    */
-  // Public for the migration Deficiency_0004: "php hubleto migrate" does not run installApp().
   public function installDeficiencyWorkflow(): void
   {
     /** @var WorkflowModel */
@@ -159,18 +158,12 @@ class Loader extends \Hubleto\App\External\WaiBlue\OhsCore\OhsApp
 
   public function renderSecondSidebar(): string
   {
-    // Medical staff do not see deficiencies (both legacy apps).
-    $deficienciesButton = '';
-    if ($this->getService(\Hubleto\App\External\WaiBlue\OhsCore\Services\AccessScope::class)->activeUserSeesWorkRecords()) {
-      $deficienciesButton = $this->secondSidebarButton('ohs/branches/deficiencies', 'fas fa-circle-exclamation', $this->translate('Deficiencies'));
-    }
-
     return '
       ' . $this->secondSidebarTitle() . '
       <div class="app-sidebar-buttons">
         ' . $this->secondSidebarButton('ohs/branches/branches', 'fas fa-industry', $this->translate('Branches')) . '
         ' . $this->secondSidebarButton('ohs/branches/jobs', 'fas fa-helmet-safety', $this->translate('Job positions')) . '
-        ' . $deficienciesButton . '
+        ' . $this->secondSidebarButton('ohs/branches/deficiencies', 'fas fa-circle-exclamation', $this->translate('Deficiencies')) . '
         ' . $this->secondSidebarButton('ohs/branches/branch-types', 'fas fa-tags', $this->translate('Branch types')) . '
         ' . $this->secondSidebarButton('ohs/branches/settings', 'fas fa-cog', $this->translate('Settings')) . '
       </div>

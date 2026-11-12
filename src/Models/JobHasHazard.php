@@ -3,7 +3,6 @@
 namespace Hubleto\App\External\WaiBlue\OhsBranches\Models;
 
 use Hubleto\App\External\WaiBlue\OhsCore\Models\Hazard;
-use Hubleto\App\External\WaiBlue\OhsCore\Models\Traits\HasHazardLevel;
 use Hubleto\Framework\Db\Column\Integer;
 use Hubleto\Framework\Db\Column\Lookup;
 use Hubleto\Framework\Db\Column\Virtual;
@@ -12,10 +11,8 @@ use Hubleto\Framework\Db\Column\Virtual;
  * Level of one catalogue hazard for one job position (one legacy app links them so; the other went through branch hazards).
  * A row means the hazard is present: category 1-4 for work factors, 1 ("yes") for the other types.
  */
-class JobHasHazard extends \Hubleto\App\External\WaiBlue\OhsCore\Models\OhsModel
+class JobHasHazard extends \Hubleto\Erp\Model
 {
-  use HasHazardLevel;
-
   // Used by the hazard levels editor for a hazard without a row.
   const LEVEL_NOT_SET = 0;
   const LEVEL_YES = 1;
@@ -34,6 +31,9 @@ class JobHasHazard extends \Hubleto\App\External\WaiBlue\OhsCore\Models\OhsModel
 
   public function describeColumns(): array
   {
+    /** @var Hazard */
+    $mHazard = $this->getModel(Hazard::class);
+
     return array_merge(parent::describeColumns(), [
       'id_job' => (new Lookup($this, $this->translate('Job position'), Job::class, 'CASCADE'))
         ->setRequired()
@@ -46,11 +46,11 @@ class JobHasHazard extends \Hubleto\App\External\WaiBlue\OhsCore\Models\OhsModel
       'level' => (new Integer($this, $this->translate('Category')))
         ->setRequired()
         ->setDefaultValue(Hazard::LEVEL_YES)
-        ->setEnumValues($this->getLevelTexts())
+        ->setEnumValues($mHazard->getLevelTexts())
       ,
       'virt_level' => (new Virtual($this, $this->translate('Category')))
         ->setDefaultVisible()
-        ->setProperty('sql', $this->getLevelTextSql())
+        ->setProperty('sql', $mHazard->getLevelTextSql($this->table))
       ,
     ]);
   }
@@ -67,6 +67,19 @@ class JobHasHazard extends \Hubleto\App\External\WaiBlue\OhsCore\Models\OhsModel
     $record = parent::onBeforeUpdate($record);
     $this->refuseInvalidHazardLevel($record);
     return $record;
+  }
+
+  private function refuseInvalidHazardLevel(array $record): void
+  {
+    $idHazard = (int) ($record['id_hazard'] ?? 0);
+    $level = (int) ($record['level'] ?? 0);
+
+    // A save may send only some columns; the others keep their stored values.
+    $storedRecord = $this->record->where('id', (int) ($record['id'] ?? 0))->first();
+    if ($storedRecord && !array_key_exists('id_hazard', $record)) $idHazard = (int) $storedRecord->id_hazard;
+    if ($storedRecord && !array_key_exists('level', $record)) $level = (int) $storedRecord->level;
+
+    $this->getModel(Hazard::class)->refuseInvalidLevel($idHazard, $level);
   }
 
   public function describeTable(): \Hubleto\Framework\Description\Table

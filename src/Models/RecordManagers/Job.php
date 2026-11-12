@@ -21,18 +21,9 @@ class Job extends \Hubleto\Erp\RecordManager
     return $this->hasMany(JobHasHazard::class, 'id_job', 'id');
   }
 
-  public function prepareReadQuery(mixed $query = null, int $level = 0, array|null $includeRelations = null): mixed
-  {
-    $query = parent::prepareReadQuery($query, $level, $includeRelations);
-
-    return $this->restrictToVisibleBranches($query);
-  }
-
   public function prepareLookupQuery(string $search): mixed
   {
     $query = parent::prepareLookupQuery($search);
-
-    $query = $this->restrictToVisibleBranches($query);
 
     // The employee form sends idBranch, so it offers only jobs of the employee's branch.
     return $this->filterByBranchFromUrl($query);

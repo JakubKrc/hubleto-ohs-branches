@@ -4,8 +4,6 @@ namespace Hubleto\App\External\WaiBlue\OhsBranches\Models;
 
 use Hubleto\App\Community\Workflow\Models\Workflow;
 use Hubleto\App\Community\Workflow\Models\WorkflowStep;
-use Hubleto\App\External\WaiBlue\OhsCore\Models\Traits\StaysInOwnWorkflow;
-use Hubleto\App\External\WaiBlue\OhsCore\Models\Traits\UsesStoredValues;
 use Hubleto\Framework\Db\Column\Lookup;
 use Hubleto\Framework\Db\Column\Text;
 
@@ -13,11 +11,8 @@ use Hubleto\Framework\Db\Column\Text;
  * Deficiency found at a branch. Both legacy apps keep the text, a note and whether it is resolved
  * (one a state, the other a due date); here the state is a Workflow step, so Hubleto keeps its history.
  */
-class Deficiency extends \Hubleto\App\External\WaiBlue\OhsCore\Models\OhsModel
+class Deficiency extends \Hubleto\Erp\Model
 {
-  use StaysInOwnWorkflow;
-  use UsesStoredValues;
-
   const WORKFLOW_GROUP = 'ohs_deficiencies';
 
   public string $table = 'ohs_deficiencies';
@@ -72,28 +67,23 @@ class Deficiency extends \Hubleto\App\External\WaiBlue\OhsCore\Models\OhsModel
   public function onBeforeCreate(array $record): array
   {
     $record = parent::onBeforeCreate($record);
-    return $this->dropSentWorkflow($record);
-  }
-
-  public function onBeforeUpdate(array $record): array
-  {
-    $record = parent::onBeforeUpdate($record);
-    // The branch stays as created (both legacy apps).
-    $record = $this->keepStoredValues($record, ['id_branch']);
-    $this->refuseWorkflowOfOtherGroup($record, self::WORKFLOW_GROUP);
-    return $record;
-  }
-
-  public function onAfterCreate(array $savedRecord): array
-  {
-    $savedRecord = parent::onAfterCreate($savedRecord);
 
     // New deficiencies start in the first step of the deficiency workflow ("newly found").
     /** @var Workflow */
     $mWorkflow = $this->getModel(Workflow::class);
-    $savedRecord = $mWorkflow->applyDefaultWorkflow($savedRecord, self::WORKFLOW_GROUP);
-    $this->record->recordUpdate($savedRecord);
+    return $mWorkflow->applyDefaultWorkflow($record, self::WORKFLOW_GROUP);
+  }
 
-    return $savedRecord;
+  // The branch stays as created (both legacy apps).
+  public function onBeforeUpdate(array $record): array
+  {
+    $record = parent::onBeforeUpdate($record);
+
+    $storedDeficiency = $this->record->where('id', (int) $record['id'])->first();
+    if ($storedDeficiency) {
+      $record['id_branch'] = $storedDeficiency->id_branch;
+    }
+
+    return $record;
   }
 }
